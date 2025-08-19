@@ -1,0 +1,47 @@
+{
+  "name": "monorepo-project-template",
+  "version": "1.0.0",
+  "description": "monorepo project template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:frontend": "cd frontend && pnpm dev:mp-weixin",
+    "dev:frontend:weixin": "cd frontend && pnpm dev:mp-weixin",
+    "dev:frontend:alipay": "cd frontend && pnpm dev:mp-alipay",
+    "dev:frontend:both": "concurrently \"pnpm dev:frontend:weixin\" \"pnpm dev:frontend:alipay\"",
+    "dev:backend": "cd backend && mvn spring-boot:run -Dspring-boot.run.profiles=${PROFILE:-dev}",
+    "dev": "node scripts/dev-selector.js",
+    "dev:full": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend:both\"",
+    "dev:backend:dev": "PROFILE=dev pnpm dev:backend",
+    "dev:backend:test": "PROFILE=test pnpm dev:backend",
+    "dev:backend:prod": "PROFILE=prod pnpm dev:backend",
+    "build:frontend": "cd frontend && pnpm build:mp-weixin",
+    "build:frontend:weixin": "cd frontend && pnpm build:mp-weixin",
+    "build:frontend:alipay": "cd frontend && pnpm build:mp-alipay",
+    "build:frontend:both": "pnpm build:frontend:weixin && pnpm build:frontend:alipay",
+    "build:backend": "cd backend && mvn clean package",
+    "build:full": "pnpm build:backend && pnpm build:frontend:both",
+    "build": "node scripts/build-selector.js",
+    "install:all": "pnpm install && cd frontend && pnpm install && cd ../backend && mvn install",
+    "commit": "git-cz",
+    "lint:frontend": "cd frontend && pnpm lint",
+    "lint:fix:frontend": "cd frontend && pnpm lint:fix",
+    "type-check:frontend": "cd frontend && pnpm type-check"
+  },
+  "devDependencies": {
+    "commitizen": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "git-cz": "^4.9.0",
+    "inquirer": "^12.9.0"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+name: 功能请求
+description: 新建一个功能
+title: 'Feature: '
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: 有什么想法?
+      placeholder: 请尽可能详细地描述您的想法或者想要的功能
+    validations:
+      required: false
