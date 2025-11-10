@@ -1,0 +1,29 @@
+{
+  "recommendations": [
+    "afzalsayed96.icones",
+    "antfu.iconify",
+    "antfu.unocss",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "lokalise.i18n-ally",
+    "mhutchie.git-graph",
+    "mikestead.dotenv",
+    "naumovs.color-highlight",
+    "pkief.material-icon-theme",
+    "sdras.vue-vscode-snippets",
+    "vue.volar",
+    "whtouche.vscode-js-console-utils",
+    "zhuangtongfa.material-theme",
+    "tu6ge.naive-ui-intelligence",
+    "redhat.vscode-xml",
+    "antfu.vite",
+    "uni-helper.uni-helper-vscode",
+    "alova.alova-vscode-extension",
+    "wot-ui.wot-ui-intellisense",
+    "vmware.vscode-boot-dev-pack",
+    "vscjava.vscode-java-pack",
+    "redhat.vscode-xml",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
