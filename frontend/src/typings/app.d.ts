@@ -891,6 +891,7 @@ declare namespace App {
       msg: string;
       /** The backend service response data */
       data: T;
+      tips: string;
     };
 
     /** The demo backend service response data */

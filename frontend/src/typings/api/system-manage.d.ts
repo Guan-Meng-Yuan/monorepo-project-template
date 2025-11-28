@@ -5,7 +5,7 @@ declare namespace Api {
    * backend api module: "systemManage"
    */
   namespace SystemManage {
-    type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'current' | 'size'>;
+    type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'pageNumber' | 'pageSize'>;
 
     /** role */
     type Role = Common.CommonRecord<{
@@ -34,7 +34,7 @@ declare namespace Api {
      * - "1": "male"
      * - "2": "female"
      */
-    type UserGender = '1' | '2';
+    type UserGender = 1 | 2;
 
     /** user */
     type User = Common.CommonRecord<{
@@ -52,6 +52,15 @@ declare namespace Api {
       userRoles: string[];
     }>;
 
+    type Tenant = Common.CommonRecord<{
+      /** tenant name */
+      name: string;
+      /** tenant code */
+      code: string;
+      /** tenant description */
+      desc: string;
+    }>;
+
     /** user search params */
     type UserSearchParams = CommonType.RecordNullable<
       Pick<Api.SystemManage.User, 'userName' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'status'> &
@@ -60,14 +69,19 @@ declare namespace Api {
 
     /** user list */
     type UserList = Common.PaginatingQueryRecord<User>;
+    type TenantList = Common.PaginatingQueryRecord<Tenant>;
+    type TenantSearchParams = CommonType.RecordNullable<
+      Pick<Api.SystemManage.Tenant, 'code' | 'name' | 'status'> & CommonSearchParams
+    >;
 
     /**
      * menu type
      *
      * - "1": directory
      * - "2": menu
+     * - "3": button
      */
-    type MenuType = '1' | '2';
+    type MenuType = '1' | '2' | '3';
 
     type MenuButton = {
       /**
@@ -103,8 +117,12 @@ declare namespace Api {
     >;
 
     type Menu = Common.CommonRecord<{
+      /** permission button code */
+      code: string;
+      /** permission button description */
+      desc: string;
       /** parent menu id */
-      parentId: number;
+      parentId: string;
       /** menu type */
       menuType: MenuType;
       /** menu name */

@@ -2,7 +2,7 @@
 import { reactive } from 'vue';
 import { NButton, NPopconfirm, NTag } from 'naive-ui';
 import { enableStatusRecord, userGenderRecord } from '@/constants/business';
-import { fetchGetUserList } from '@/service/api';
+import { fetchDeleteUser, fetchGetUserList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { defaultTransform, useNaivePaginatedTable, useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
@@ -26,8 +26,8 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
   api: () => fetchGetUserList(searchParams),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page;
-    searchParams.size = params.pageSize;
+    searchParams.pageNumber = params.page;
+    searchParams.pageSize = params.pageSize;
   },
   columns: () => [
     {
@@ -146,19 +146,21 @@ const {
 
 async function handleBatchDelete() {
   // request
-  console.log(checkedRowKeys.value);
-
-  onBatchDeleted();
+  const { data: result } = await fetchDeleteUser(checkedRowKeys.value);
+  if (result) {
+    onBatchDeleted();
+  }
 }
 
-function handleDelete(id: number) {
+async function handleDelete(id: string) {
   // request
-  console.log(id);
-
-  onDeleted();
+  const { data: result } = await fetchDeleteUser([id]);
+  if (result) {
+    onDeleted();
+  }
 }
 
-function edit(id: number) {
+function edit(id: string) {
   handleEdit(id);
 }
 </script>

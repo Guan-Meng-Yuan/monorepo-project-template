@@ -99,16 +99,10 @@ export const request = createFlatRequest(
       return null;
     },
     onError(error) {
-      // when the request is fail, you can show error message
-
       let message = error.message;
       let backendErrorCode = '';
-
-      // get backend error message and code
-      if (error.code === BACKEND_ERROR_CODE) {
-        message = error.response?.data?.msg || message;
-        backendErrorCode = String(error.response?.data?.code || '');
-      }
+      message = error.response?.data?.tips || message;
+      backendErrorCode = String(error.response?.data?.code || '');
 
       // the error message is displayed in the modal
       const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];

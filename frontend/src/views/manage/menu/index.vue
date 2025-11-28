@@ -28,27 +28,6 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       width: 48
     },
     {
-      key: 'id',
-      title: $t('page.manage.menu.id'),
-      align: 'center'
-    },
-    {
-      key: 'menuType',
-      title: $t('page.manage.menu.menuType'),
-      align: 'center',
-      width: 80,
-      render: row => {
-        const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
-          1: 'default',
-          2: 'primary'
-        };
-
-        const label = $t(menuTypeRecord[row.menuType]);
-
-        return <NTag type={tagMap[row.menuType]}>{label}</NTag>;
-      }
-    },
-    {
       key: 'menuName',
       title: $t('page.manage.menu.menuName'),
       align: 'center',
@@ -59,6 +38,23 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
         const label = i18nKey ? $t(i18nKey) : menuName;
 
         return <span>{label}</span>;
+      }
+    },
+    {
+      key: 'menuType',
+      title: $t('page.manage.menu.menuType'),
+      align: 'center',
+      width: 80,
+      render: row => {
+        const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
+          1: 'default',
+          2: 'primary',
+          3: 'success'
+        };
+
+        const label = $t(menuTypeRecord[row.menuType]);
+
+        return <NTag type={tagMap[row.menuType]}>{label}</NTag>;
       }
     },
     {
@@ -129,12 +125,6 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       }
     },
     {
-      key: 'parentId',
-      title: $t('page.manage.menu.parentId'),
-      width: 90,
-      align: 'center'
-    },
-    {
       key: 'order',
       title: $t('page.manage.menu.order'),
       align: 'center',
@@ -144,22 +134,28 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       key: 'operate',
       title: $t('common.operate'),
       align: 'center',
+      fixed: 'right',
       width: 230,
       render: row => (
         <div class="flex-center justify-end gap-8px">
           {row.menuType === '1' && (
-            <NButton type="primary" ghost size="small" onClick={() => handleAddChildMenu(row)}>
+            <NButton type="primary" text ghost size="small" onClick={() => handleAddChildMenu(row)}>
               {$t('page.manage.menu.addChildMenu')}
             </NButton>
           )}
-          <NButton type="primary" ghost size="small" onClick={() => handleEdit(row)}>
+          {(row.menuType === '2' || row.menuType === '1') && (
+            <NButton type="primary" text ghost size="small" onClick={() => handleAddButton(row)}>
+              {'新增权限按钮'}
+            </NButton>
+          )}
+          <NButton type="primary" ghost text size="small" onClick={() => handleEdit(row)}>
             {$t('common.edit')}
           </NButton>
           <NPopconfirm onPositiveClick={() => handleDelete(row.id)}>
             {{
               default: () => $t('common.confirmDelete'),
               trigger: () => (
-                <NButton type="error" ghost size="small">
+                <NButton type="error" ghost text size="small">
                   {$t('common.delete')}
                 </NButton>
               )
@@ -187,7 +183,7 @@ async function handleBatchDelete() {
   onBatchDeleted();
 }
 
-function handleDelete(id: number) {
+function handleDelete(id: string) {
   // request
   console.log(id);
 
@@ -205,7 +201,15 @@ function handleEdit(item: Api.SystemManage.Menu) {
 }
 
 function handleAddChildMenu(item: Api.SystemManage.Menu) {
-  operateType.value = 'addChild';
+  operateType.value = 'addChildMenu';
+
+  editingData.value = { ...item };
+
+  openModal();
+}
+
+function handleAddButton(item: Api.SystemManage.Menu) {
+  operateType.value = 'addButton';
 
   editingData.value = { ...item };
 

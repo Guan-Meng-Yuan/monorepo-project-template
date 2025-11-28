@@ -8,11 +8,11 @@ declare namespace Api {
     /** common params of paginating */
     interface PaginatingCommonParams {
       /** current page number */
-      current: number;
+      pageNumber: number;
       /** page size */
-      size: number;
+      pageSize: number;
       /** total count */
-      total: number;
+      totalRow: number;
     }
 
     /** common params of paginating query list data */
@@ -21,7 +21,7 @@ declare namespace Api {
     }
 
     /** common search params of table */
-    type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'current' | 'size'>;
+    type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'pageNumber' | 'pageSize'>;
 
     /**
      * enable status
@@ -34,7 +34,7 @@ declare namespace Api {
     /** common record */
     type CommonRecord<T = any> = {
       /** record id */
-      id: number;
+      id: string;
       /** record creator */
       createBy: string;
       /** record create time */

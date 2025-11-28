@@ -23,8 +23,8 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
   api: () => fetchGetRoleList(searchParams),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page;
-    searchParams.size = params.pageSize;
+    searchParams.pageNumber = params.page;
+    searchParams.pageSize = params.pageSize;
   },
   columns: () => [
     {
@@ -121,14 +121,14 @@ async function handleBatchDelete() {
   onBatchDeleted();
 }
 
-function handleDelete(id: number) {
+function handleDelete(id: string) {
   // request
   console.log(id);
 
   onDeleted();
 }
 
-function edit(id: number) {
+function edit(id: string) {
   handleEdit(id);
 }
 </script>

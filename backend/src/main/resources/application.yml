@@ -1,3 +1,24 @@
 spring:
   application:
     name: backend
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://192.168.3.205:3306/backend
+    username: root
+    password: Aa123456#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+sa-token:
+  token-name: Authorization
+  timeout: -1
+  token-style: simple-uuid
+  token-prefix: Bearer
+  is-print: false
+  jwt-secret-key: backend-jwt-secret-key
+  is-read-cookie: false
+  is-read-body: false
+  is-write-header: false
