@@ -144,3 +144,29 @@ export function fetchGetRoleButtonPermissions(roleId: string) {
     method: 'get'
   });
 }
+export type RoleModel = Pick<Api.SystemManage.Role, 'roleName' | 'roleCode' | 'roleDesc' | 'status'>;
+export function fetchAddOrUpdateRole(data: RoleModel) {
+  return request<boolean>({
+    url: '/systemManage/addOrUpdateRole',
+    method: 'post',
+    data
+  });
+}
+export function fetchDeleteRole(roleIds: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteRole/${roleIds}`,
+    method: 'delete'
+  });
+}
+export function fetchDeleteMenu(menuIds: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteMenu/${menuIds}`,
+    method: 'delete'
+  });
+}
+export function fetchDeleteTenant(tenantIds: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteTenant/${tenantIds}`,
+    method: 'delete'
+  });
+}

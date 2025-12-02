@@ -112,6 +112,35 @@ public class SystemManageController {
         });
     }
 
+    @PostMapping("addOrUpdateRole")
+    @Transactional
+    public R<Boolean> addOrUpdateRole(@RequestBody Role role) {
+        if (Role.of().where(Role::getRoleCode).eq(role.getRoleCode())
+                .and(Role::getId).ne(role.getId())
+                .exists()) {
+            throw new ServiceException("角色编码已存在");
+        }
+        return R.ok(role.saveOrUpdate());
+    }
+
+    @DeleteMapping("deleteRole/{ids}")
+    @Transactional
+    public R<Boolean> deleteRole(@PathVariable Long[] ids) {
+        if (ArrayUtil.isEmpty(ids)) {
+            throw new ServiceException("请选择角色");
+        }
+        return R.ok(Role.of().where(Role::getId).in(ListUtil.of(ids)).remove());
+    }
+
+    @DeleteMapping("deleteMenu/{ids}")
+    @Transactional
+    public R<Boolean> deleteMenu(@PathVariable Long[] ids) {
+        if (ArrayUtil.isEmpty(ids)) {
+            throw new ServiceException("请选择菜单");
+        }
+        return R.ok(Permission.of().where(Permission::getId).in(ListUtil.of(ids)).remove());
+    }
+
     @DeleteMapping("deleteUser/{ids}")
     public R<Boolean> deleteUser(@PathVariable Long[] ids) {
         if (ArrayUtil.isEmpty(ids)) {
@@ -134,6 +163,8 @@ public class SystemManageController {
     public R<Page<Permission>> getMenuList(PageReq<Permission> pageReq, Permission permission) {
         return R.ok(Permission.of()
                 .where(Permission::getParentId).eq(0)
+                .orderBy(Permission::getHideInMenu).asc()
+                .orderBy(Permission::getOrder).asc()
                 .withRelations()
                 .page(pageReq.of()));
     }
@@ -148,15 +179,12 @@ public class SystemManageController {
 
     @GetMapping("getMenuTree")
     public R<List<Permission>> getMenuTree() {
-        return R.ok(
-                Permission.of()
-                        .where(Permission::getParentId).eq(0)
-                        .withFields()
-                        .fieldMapping(Permission::getChildren, per -> Permission.of()
-                                .where(Permission::getParentId).eq(per.getId())
-                                .and(Permission::getMenuType).ne("3")
-                                .toQueryWrapper())
-                        .list());
+        return R.ok(Permission.of()
+                .where(Permission::getParentId).eq(0)
+                .orderBy(Permission::getHideInMenu).asc()
+                .orderBy(Permission::getOrder).asc()
+                .withRelations()
+                .list());
     }
 
     @GetMapping("getRolePermissionId/{roleId}")
@@ -164,11 +192,7 @@ public class SystemManageController {
         return R.ok(
                 RolePermission.of()
                         .select(QueryMethods.distinct(RolePermission::getPermissionId))
-                        .innerJoin(Permission.class)
-                        .on(QueryMethods.column(RolePermission::getPermissionId)
-                                .eq(QueryMethods.column(Permission::getId)))
-                        .where(Permission::getMenuType).ne("3")
-                        .and(RolePermission::getRoleId).eq(roleId)
+                        .where(RolePermission::getRoleId).eq(roleId)
                         .objListAs(Long.class)
 
         );
@@ -224,5 +248,13 @@ public class SystemManageController {
                         .where(Permission::getMenuType).eq("3")
                         .and(RolePermission::getRoleId).eq(roleId)
                         .objListAs(Long.class));
+    }
+    @DeleteMapping("deleteTenant/{ids}")
+    @Transactional
+    public R<Boolean> deleteTenant(@PathVariable Long[] ids) {
+        if (ArrayUtil.isEmpty(ids)) {
+            throw new ServiceException("请选择租户");
+        }
+        return R.ok(Tenant.of().where(Tenant::getId).in(ListUtil.of(ids)).remove());
     }
 }

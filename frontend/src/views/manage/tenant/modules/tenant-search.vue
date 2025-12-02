@@ -66,6 +66,7 @@ async function search() {
                 v-model:value="model.status"
                 placeholder="请选择租户状态"
                 :options="translateOptions(enableStatusOptions)"
+                label-field="label"
                 clearable
               />
             </NFormItemGi>

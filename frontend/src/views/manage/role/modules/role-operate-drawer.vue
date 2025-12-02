@@ -3,6 +3,8 @@ import { computed, ref, watch } from 'vue';
 import { jsonClone } from '@sa/utils';
 import { useBoolean } from '@sa/hooks';
 import { enableStatusOptions } from '@/constants/business';
+import type { RoleModel } from '@/service/api';
+import { fetchAddOrUpdateRole } from '@/service/api';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import MenuAuthModal from './menu-auth-modal.vue';
@@ -33,7 +35,7 @@ const visible = defineModel<boolean>('visible', {
 const { formRef, validate, restoreValidation } = useNaiveForm();
 const { defaultRequiredRule } = useFormRules();
 const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean();
-
+const loading = ref(false);
 const title = computed(() => {
   const titles: Record<NaiveUI.TableOperateType, string> = {
     add: $t('page.manage.role.addRole'),
@@ -42,11 +44,9 @@ const title = computed(() => {
   return titles[props.operateType];
 });
 
-type Model = Pick<Api.SystemManage.Role, 'roleName' | 'roleCode' | 'roleDesc' | 'status'>;
-
 const model = ref(createDefaultModel());
 
-function createDefaultModel(): Model {
+function createDefaultModel(): RoleModel {
   return {
     roleName: '',
     roleCode: '',
@@ -55,7 +55,7 @@ function createDefaultModel(): Model {
   };
 }
 
-type RuleKey = Exclude<keyof Model, 'roleDesc'>;
+type RuleKey = Exclude<keyof RoleModel, 'roleDesc'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
   roleName: defaultRequiredRule,
@@ -80,11 +80,15 @@ function closeDrawer() {
 }
 
 async function handleSubmit() {
+  loading.value = true;
   await validate();
-  // request
-  window.$message?.success($t('common.updateSuccess'));
-  closeDrawer();
-  emit('submitted');
+  const { error, data } = await fetchAddOrUpdateRole(model.value);
+  loading.value = false;
+  if (!error && data) {
+    window.$message?.success($t('common.updateSuccess'));
+    closeDrawer();
+    emit('submitted');
+  }
 }
 
 watch(visible, () => {
@@ -121,7 +125,7 @@ watch(visible, () => {
       <template #footer>
         <NSpace :size="16">
           <NButton @click="closeDrawer">{{ $t('common.cancel') }}</NButton>
-          <NButton type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
+          <NButton :loading="loading" type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
         </NSpace>
       </template>
     </NDrawerContent>

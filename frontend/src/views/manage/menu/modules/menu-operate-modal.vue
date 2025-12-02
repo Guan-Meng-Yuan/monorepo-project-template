@@ -45,7 +45,35 @@ const visible = defineModel<boolean>('visible', {
 const { formRef, validate, restoreValidation } = useNaiveForm();
 const { defaultRequiredRule, createRequiredRule } = useFormRules();
 
+const model = ref(createDefaultModel());
+
 const title = computed(() => {
+  const menuType = model.value.menuType;
+
+  // 根据 operateType 和 menuType 动态生成标题
+  if (props.operateType === 'add' || props.operateType === 'addChildMenu' || props.operateType === 'addButton') {
+    if (menuType === '1') {
+      return '新增目录';
+    } else if (menuType === '2') {
+      return props.operateType === 'addChildMenu'
+        ? $t('page.manage.menu.addChildMenu')
+        : $t('page.manage.menu.addMenu');
+    } else if (menuType === '3') {
+      return '新增权限按钮';
+    }
+  }
+
+  if (props.operateType === 'edit') {
+    if (menuType === '1') {
+      return '编辑目录';
+    } else if (menuType === '2') {
+      return $t('page.manage.menu.editMenu');
+    } else if (menuType === '3') {
+      return '编辑权限按钮';
+    }
+  }
+
+  // 兜底逻辑
   const titles: Record<OperateType, string> = {
     add: $t('page.manage.menu.addMenu'),
     addChildMenu: $t('page.manage.menu.addChildMenu'),
@@ -54,8 +82,6 @@ const title = computed(() => {
   };
   return titles[props.operateType];
 });
-
-const model = ref(createDefaultModel());
 
 function createDefaultModel(): MenuModel {
   return {
@@ -95,8 +121,6 @@ const rules: Record<RuleKey, App.Global.FormRule> = {
   routePath: defaultRequiredRule,
   code: createRequiredRule('请输入权限按钮编码')
 };
-
-const disabledMenuType = true;
 
 const localIcons = getLocalIcons();
 const localIconOptions = localIcons.map<SelectOption>(item => ({
@@ -251,16 +275,23 @@ watch(
 <template>
   <NModal v-model:show="visible" :title="title" preset="card" class="w-800px">
     <NScrollbar class="h-480px pr-20px">
-      <NForm ref="formRef" :model="model" :rules="rules" label-placement="left" :label-width="100">
+      <NForm
+        ref="formRef"
+        :model="model"
+        :rules="rules"
+        label-placement="left"
+        require-mark-placement="left"
+        label-align="right"
+        label-width="120"
+      >
         <NGrid responsive="screen" item-responsive>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.menuType')" path="menuType">
-            <NRadioGroup v-model:value="model.menuType" :disabled="disabledMenuType">
+            <NRadioGroup v-model:value="model.menuType">
               <NRadio v-for="item in menuTypeOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
             </NRadioGroup>
           </NFormItemGi>
           <NFormItemGi
             span="24 m:12"
-            :label-width="model.menuType === '3' ? 120 : 100"
             :label="model.menuType === '3' ? '权限按钮名称' : $t('page.manage.menu.menuName')"
             path="menuName"
           >
@@ -466,10 +497,10 @@ watch(
               </template>
             </NDynamicInput>
           </NFormItemGi>
-          <NFormItemGi v-if="model.menuType === '3'" :label-width="120" span="24 m:12" label="权限按钮编码" path="code">
+          <NFormItemGi v-if="model.menuType === '3'" span="24 m:12" label="权限按钮编码" path="code">
             <NInput v-model:value="model.code" placeholder="请输入权限按钮编码" />
           </NFormItemGi>
-          <NFormItemGi v-if="model.menuType === '3'" span="24 m:12" :label-width="120" label="权限按钮描述" path="desc">
+          <NFormItemGi v-if="model.menuType === '3'" span="24 m:12" label="权限按钮描述" path="desc">
             <NInput v-model:value="model.desc" type="textarea" placeholder="请输入权限按钮描述" />
           </NFormItemGi>
         </NGrid>

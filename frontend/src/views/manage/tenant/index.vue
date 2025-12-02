@@ -2,7 +2,7 @@
 import { reactive } from 'vue';
 import { NButton, NPopconfirm, NTag } from 'naive-ui';
 import { enableStatusRecord } from '@/constants/business';
-import { fetchDeleteUser, fetchGetTenantList } from '@/service/api';
+import { fetchDeleteTenant, fetchGetTenantList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { defaultTransform, useNaivePaginatedTable, useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
@@ -114,7 +114,7 @@ const {
 
 async function handleBatchDelete() {
   // request
-  const { data: result } = await fetchDeleteUser(checkedRowKeys.value);
+  const { data: result } = await fetchDeleteTenant(checkedRowKeys.value);
   if (result) {
     onBatchDeleted();
   }
@@ -122,7 +122,7 @@ async function handleBatchDelete() {
 
 async function handleDelete(id: string) {
   // request
-  const { data: result } = await fetchDeleteUser([id]);
+  const { data: result } = await fetchDeleteTenant([id]);
   if (result) {
     onDeleted();
   }

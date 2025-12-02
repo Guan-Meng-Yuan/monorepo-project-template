@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, h, shallowRef, watch } from 'vue';
+import { computed, h, ref, shallowRef, watch } from 'vue';
 import type { TreeOption } from 'naive-ui';
-import { fetchGetAllPages, fetchGetMenuTree, fetchGetRolePermissionIds, fetchSaveRolePermission } from '@/service/api';
+import { NTag } from 'naive-ui';
+import { menuTypeRecord } from '@/constants/business';
+import { fetchGetMenuTree, fetchGetRolePermissionIds, fetchSaveRolePermission } from '@/service/api';
 import { $t } from '@/locales';
-
 defineOptions({
   name: 'MenuAuthModal'
 });
@@ -23,23 +24,7 @@ function closeModal() {
   visible.value = false;
 }
 
-const title = computed(() => $t('common.edit') + $t('page.manage.role.menuAuth'));
-
-const home = shallowRef('');
-
-async function getHome() {
-  home.value = 'home';
-}
-
-const pages = shallowRef<string[]>([]);
-
-async function getPages() {
-  const { error, data } = await fetchGetAllPages();
-
-  if (!error) {
-    pages.value = data;
-  }
-}
+const title = computed(() => `${$t('common.edit')}角色权限`);
 
 const tree = shallowRef<Api.SystemManage.MenuTree[]>([]);
 
@@ -60,12 +45,14 @@ async function getChecks() {
     checks.value = data;
   }
 }
-
+const loading = ref(false);
 async function handleSubmit() {
+  loading.value = true;
   const { error, data } = await fetchSaveRolePermission({
     roleId: props.roleId,
     permissionIds: checks.value
   });
+  loading.value = false;
   if (!error && data) {
     window.$message?.success?.($t('common.modifySuccess'));
     closeModal();
@@ -73,8 +60,6 @@ async function handleSubmit() {
 }
 
 function init() {
-  getHome();
-  getPages();
   getTree();
   getChecks();
 }
@@ -92,16 +77,26 @@ function renderLabel({ option }: { option: TreeOption }) {
   }
   return h('div', (option as Api.SystemManage.Menu).menuName);
 }
+
+function renderSuffix({ option }: { option: TreeOption }) {
+  const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
+    1: 'default',
+    2: 'primary',
+    3: 'success'
+  };
+
+  const label = $t(menuTypeRecord[option.menuType as Api.SystemManage.MenuType]);
+
+  return h(
+    NTag,
+    { type: tagMap[option.menuType as Api.SystemManage.MenuType], bordered: false, size: 'small' },
+    { default: () => label }
+  );
+}
 </script>
 
 <template>
   <NModal v-model:show="visible" :title="title" preset="card" class="w-480px">
-    <!--
- <div class="flex-y-center gap-16px pb-12px">
-      <div>{{ $t('page.manage.menu.home') }}</div>
-      <NSelect :value="home" :options="pageSelectOptions" size="small" class="w-160px" @update:value="updateHome" />
-    </div>
--->
     <NTree
       v-model:checked-keys="checks"
       :data="tree"
@@ -109,6 +104,7 @@ function renderLabel({ option }: { option: TreeOption }) {
       checkable
       expand-on-click
       :render-label="renderLabel"
+      :render-suffix="renderSuffix"
       virtual-scroll
       block-line
       class="h-280px"
@@ -118,7 +114,7 @@ function renderLabel({ option }: { option: TreeOption }) {
         <NButton size="small" class="mt-16px" @click="closeModal">
           {{ $t('common.cancel') }}
         </NButton>
-        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">
+        <NButton type="primary" :loading="loading" size="small" class="mt-16px" @click="handleSubmit">
           {{ $t('common.confirm') }}
         </NButton>
       </NSpace>

@@ -5,6 +5,7 @@ import { enableStatusOptions } from '@/constants/business';
 import type { TenantModel } from '@/service/api';
 import { fetchAddOrUpdateTenant, fetchGetAllRoles } from '@/service/api';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { $t } from '@/locales';
 
 defineOptions({
   name: 'TenantOperateDrawer'
@@ -86,12 +87,14 @@ function handleInitModel() {
 function closeDrawer() {
   visible.value = false;
 }
-
+const loading = ref(false);
 async function handleSubmit() {
+  loading.value = true;
   await validate();
-  const { data } = await fetchAddOrUpdateTenant(model.value);
-  if (data) {
-    window.$message?.success('操作成功');
+  const { error, data } = await fetchAddOrUpdateTenant(model.value);
+  loading.value = false;
+  if (!error && data) {
+    window.$message?.success($t('common.updateSuccess'));
     closeDrawer();
     emit('submitted');
   }
@@ -117,13 +120,15 @@ watch(visible, () => {
           <NInput v-model:value="model.code" placeholder="请输入租户编码" />
         </NFormItem>
         <NFormItem label="租户状态" path="status">
-          <NSelect v-model:value="model.status" placeholder="请选择租户状态" :options="enableStatusOptions" />
+          <NRadioGroup v-model:value="model.status">
+            <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
+          </NRadioGroup>
         </NFormItem>
       </NForm>
       <template #footer>
         <NSpace :size="16">
           <NButton @click="closeDrawer">{{ $t('common.cancel') }}</NButton>
-          <NButton type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
+          <NButton type="primary" :loading="loading" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
         </NSpace>
       </template>
     </NDrawerContent>

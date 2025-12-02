@@ -1,13 +1,9 @@
 package com.guanmengyuan.backend.model.domain;
 
-import java.io.Serializable;
-
 import org.hibernate.annotations.Comment;
 
 import com.guanmengyuan.backend.model.enums.CommonStatus;
 import com.guanmengyuan.spring.ex.common.model.domain.BaseDomain;
-import com.guanmengyuan.spring.ex.common.model.domain.TenantDomain;
-import com.mybatisflex.core.activerecord.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -5,7 +5,7 @@ import { NButton, NPopconfirm, NTag } from 'naive-ui';
 import { useBoolean } from '@sa/hooks';
 import { yesOrNoRecord } from '@/constants/common';
 import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
-import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
+import { fetchDeleteMenu, fetchGetAllPages, fetchGetMenuList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { defaultTransform, useNaivePaginatedTable, useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
@@ -24,14 +24,13 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
   columns: () => [
     {
       type: 'selection',
-      align: 'center',
-      width: 48
+      align: 'center'
     },
     {
       key: 'menuName',
       title: $t('page.manage.menu.menuName'),
       align: 'center',
-      minWidth: 120,
+
       render: row => {
         const { i18nKey, menuName } = row;
 
@@ -44,7 +43,7 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       key: 'menuType',
       title: $t('page.manage.menu.menuType'),
       align: 'center',
-      width: 80,
+
       render: row => {
         const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
           1: 'default',
@@ -61,7 +60,7 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       key: 'icon',
       title: $t('page.manage.menu.icon'),
       align: 'center',
-      width: 60,
+
       render: row => {
         const icon = row.iconType === '1' ? row.icon : undefined;
 
@@ -77,20 +76,17 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
     {
       key: 'routeName',
       title: $t('page.manage.menu.routeName'),
-      align: 'center',
-      minWidth: 120
+      align: 'center'
     },
     {
       key: 'routePath',
       title: $t('page.manage.menu.routePath'),
-      align: 'center',
-      minWidth: 120
+      align: 'center'
     },
     {
       key: 'status',
       title: $t('page.manage.menu.menuStatus'),
       align: 'center',
-      width: 80,
       render: row => {
         if (row.status === null) {
           return null;
@@ -110,7 +106,6 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       key: 'hideInMenu',
       title: $t('page.manage.menu.hideInMenu'),
       align: 'center',
-      width: 80,
       render: row => {
         const hide: CommonType.YesOrNo = row.hideInMenu ? 'Y' : 'N';
 
@@ -127,15 +122,13 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
     {
       key: 'order',
       title: $t('page.manage.menu.order'),
-      align: 'center',
-      width: 60
+      align: 'center'
     },
     {
       key: 'operate',
       title: $t('common.operate'),
       align: 'center',
       fixed: 'right',
-      width: 230,
       render: row => (
         <div class="flex-center justify-end gap-8px">
           {row.menuType === '1' && (
@@ -177,17 +170,18 @@ function handleAdd() {
 }
 
 async function handleBatchDelete() {
-  // request
-  console.log(checkedRowKeys.value);
-
-  onBatchDeleted();
+  const { error, data: result } = await fetchDeleteMenu(checkedRowKeys.value);
+  if (!error && result) {
+    window.$message?.success($t('common.deleteSuccess'));
+    onBatchDeleted();
+  }
 }
-
-function handleDelete(id: string) {
-  // request
-  console.log(id);
-
-  onDeleted();
+async function handleDelete(id: string) {
+  const { error, data: result } = await fetchDeleteMenu([id]);
+  if (!error && result) {
+    window.$message?.success($t('common.deleteSuccess'));
+    onDeleted();
+  }
 }
 
 /** the edit menu data or the parent menu data when adding a child menu */
