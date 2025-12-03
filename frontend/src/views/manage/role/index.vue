@@ -90,7 +90,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
             {{
               default: () => $t('common.confirmDelete'),
               trigger: () => (
-                <NButton type="error" ghost size="small">
+                <NButton disabled={row.roleCode === 'R_SUPER'} type="error" ghost size="small">
                   {$t('common.delete')}
                 </NButton>
               )

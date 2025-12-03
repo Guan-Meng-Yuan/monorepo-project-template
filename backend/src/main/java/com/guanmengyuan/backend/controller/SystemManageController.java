@@ -105,7 +105,7 @@ public class SystemManageController {
             Boolean isNew = null == tenant.getId();
             Boolean result = tenant.saveOrUpdate();
             if (isNew) {
-                tenantService.initTenantManager(tenant);
+                tenantService.initTenantManager(tenant, false);
             }
             return R.ok(result);
 
@@ -249,6 +249,7 @@ public class SystemManageController {
                         .and(RolePermission::getRoleId).eq(roleId)
                         .objListAs(Long.class));
     }
+
     @DeleteMapping("deleteTenant/{ids}")
     @Transactional
     public R<Boolean> deleteTenant(@PathVariable Long[] ids) {

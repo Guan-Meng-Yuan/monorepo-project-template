@@ -5,6 +5,6 @@ import com.mybatisflex.core.service.IService;
 
 public interface TenantService extends IService<Tenant>{
 
-    void initTenantManager(Tenant tenant);
+    void initTenantManager(Tenant tenant,Boolean isSys);
     
 }

@@ -29,6 +29,8 @@ public class Tenant extends BaseDomain<Tenant> {
     @Comment("租户描述")
     @Column(name = "`desc`")
     private String desc;
+    
+    @Comment("租户状态")
     @Column(columnDefinition = "tinyint(1)")
     private CommonStatus status;
 }

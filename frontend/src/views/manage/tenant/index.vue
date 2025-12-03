@@ -11,15 +11,12 @@ import TenantSearch from './modules/tenant-search.vue';
 
 const appStore = useAppStore();
 
-const searchParams: Api.SystemManage.UserSearchParams = reactive({
+const searchParams: Api.SystemManage.TenantSearchParams = reactive({
   current: 1,
   size: 10,
   status: null,
-  userName: null,
-  userGender: null,
-  nickName: null,
-  userPhone: null,
-  userEmail: null
+  code: null,
+  name: null
 });
 
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
