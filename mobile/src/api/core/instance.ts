@@ -4,8 +4,15 @@ import vueHook from 'alova/vue'
 import mockAdapter from '../mock/mockAdapter'
 import { handleAlovaError, handleAlovaResponse } from './handlers'
 
+let baseURL
+// #ifdef H5
+baseURL = import.meta.env.VITE_API_BASE_PREFIX || '/api'
+// #endif
+// #ifndef H5
+baseURL = import.meta.env.VITE_API_BASE_URL || 'https://petstore3.swagger.io/api/v3'
+// #endif
 export const alovaInstance = createAlova({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://petstore3.swagger.io/api/v3',
+  baseURL,
   ...AdapterUniapp({
     mockRequest: mockAdapter,
   }),

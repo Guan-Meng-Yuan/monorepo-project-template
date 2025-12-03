@@ -26,6 +26,7 @@ export class ApiError extends Error {
 interface ApiResponse {
   code: number
   msg?: string
+  tips?: string
   data?: any
   success?: boolean
   total?: number
@@ -54,19 +55,25 @@ export async function handleAlovaResponse(
 
   // Handle HTTP error status codes
   if (statusCode >= 400) {
-    globalToast.error(`Request failed with status: ${statusCode}`)
-    throw new ApiError(`Request failed with status: ${statusCode}`, statusCode, data)
+    if (data) {
+      const res = data as ApiResponse
+      globalToast.error(res?.tips || `Request failed with status: ${statusCode}`)
+      throw new ApiError(`Request failed with status: ${statusCode}`, statusCode, data)
+    }
+    else {
+      globalToast.error(`Request failed with status: ${statusCode}`)
+      throw new ApiError(`Request failed with status: ${statusCode}`, statusCode, data)
+    }
   }
 
   // The data is already parsed by UniApp adapter
   const json = data as ApiResponse
-  // Log response in development
-  if (import.meta.env.MODE === 'development') {
-    console.log('[Alova Response]', json)
+  if (!json.success) {
+    globalToast.error(json?.tips || `Request failed with status: ${statusCode}`)
+    throw new ApiError(json?.tips || `Request failed with status: ${statusCode}`, statusCode, data)
   }
-
   // Return data for successful responses
-  return json
+  return json.data
 }
 
 // Handle request errors

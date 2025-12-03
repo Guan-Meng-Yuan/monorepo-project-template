@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { createGlobalLoadingMiddleware } from '@/api/core/middleware'
+
 definePage({
   name: 'request',
   style: {
@@ -116,10 +118,22 @@ function handleNavigate(url: string) {
   })
   // #endif
 }
+
+const { data: resData, send } = useRequest(Apis.test.test, {
+  immediate: false
+})
+
+// 调用 test 接口的示例
+function test() {
+  send({})
+
+}
 </script>
 
 <template>
   <view class="min-h-screen bg-gray-100 py-3 dark:bg-[var(--wot-dark-background)]">
+    <wd-button @click="test">测试按钮</wd-button>
+    <div>{{ resData }}</div>
     <!-- 头部介绍 -->
     <view class="mx-3 mb-3">
       <view class="rounded-3 bg-white px-5 py-8 text-center dark:bg-[var(--wot-dark-background2)]">
@@ -141,11 +155,8 @@ function handleNavigate(url: string) {
     <!-- Alova 核心特性 -->
     <demo-block title="Alova 核心特性" transparent>
       <view class="grid grid-cols-2 gap-3">
-        <view
-          v-for="feature in alovaFeatures"
-          :key="feature.title"
-          class="rounded-2 bg-white p-3 dark:bg-[var(--wot-dark-background2)]"
-        >
+        <view v-for="feature in alovaFeatures" :key="feature.title"
+          class="rounded-2 bg-white p-3 dark:bg-[var(--wot-dark-background2)]">
           <view class="mb-2 flex items-center">
             <view class="mr-2 text-5">
               {{ feature.icon }}
@@ -181,12 +192,7 @@ function handleNavigate(url: string) {
           </view>
 
           <view class="mb-3">
-            <wd-button
-              type="primary"
-              block
-              :loading="petLoading"
-              @click="demoLoadPets"
-            >
+            <wd-button type="primary" block :loading="petLoading" @click="demoLoadPets">
               获取宠物列表
             </wd-button>
           </view>
@@ -234,12 +240,7 @@ function handleNavigate(url: string) {
           </view>
 
           <view class="mb-3">
-            <wd-button
-              type="warning"
-              block
-              :loading="loginLoading"
-              @click="demoLogin"
-            >
+            <wd-button type="warning" block :loading="loginLoading" @click="demoLogin">
               模拟用户登录
             </wd-button>
           </view>
@@ -280,10 +281,14 @@ function handleNavigate(url: string) {
     <demo-block title="相关链接" transparent>
       <wd-cell-group border custom-class="rounded-2! overflow-hidden">
         <wd-cell title="📚 Alova 官方文档" value="alova.js.org" is-link @click="handleNavigate('https://alova.js.org/')" />
-        <wd-cell title="🐙 GitHub 仓库" value="alovajs/alova" is-link @click="handleNavigate('https://github.com/alovajs/alova')" />
-        <wd-cell title="📖 uni-app 文档" value="网络请求" is-link @click="handleNavigate('https://uniapp.dcloud.net.cn/api/request/request.html')" />
-        <wd-cell title="🎯 Alova Hooks" value="请求策略" is-link @click="handleNavigate('https://alova.js.org/zh-CN/tutorial/client/strategy/')" />
-        <wd-cell title="💡 最佳实践" value="使用指南" is-link @click="handleNavigate('https://alova.js.org/zh-CN/tutorial/project/best-practice/')" />
+        <wd-cell title="🐙 GitHub 仓库" value="alovajs/alova" is-link
+          @click="handleNavigate('https://github.com/alovajs/alova')" />
+        <wd-cell title="📖 uni-app 文档" value="网络请求" is-link
+          @click="handleNavigate('https://uniapp.dcloud.net.cn/api/request/request.html')" />
+        <wd-cell title="🎯 Alova Hooks" value="请求策略" is-link
+          @click="handleNavigate('https://alova.js.org/zh-CN/tutorial/client/strategy/')" />
+        <wd-cell title="💡 最佳实践" value="使用指南" is-link
+          @click="handleNavigate('https://alova.js.org/zh-CN/tutorial/project/best-practice/')" />
       </wd-cell-group>
     </demo-block>
   </view>

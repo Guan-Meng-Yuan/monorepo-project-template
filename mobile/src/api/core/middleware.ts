@@ -87,6 +87,6 @@ export function createGlobalLoadingMiddleware(options: {
 }
 
 // 导出延迟加载中间件作为默认中间件
-export const defaultMiddleware = createDelayLoadingMiddleware()
+export const defaultMiddleware = createGlobalLoadingMiddleware()
 
 export default defaultMiddleware
