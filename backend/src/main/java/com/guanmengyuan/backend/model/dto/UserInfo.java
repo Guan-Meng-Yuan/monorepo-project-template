@@ -10,4 +10,5 @@ public class UserInfo implements Serializable{
     private String userName;
     private List<String> roles;
     private List<String> buttons;
+    private String nickName;
 }

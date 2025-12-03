@@ -46,3 +46,7 @@ export function fetchRefreshToken(refreshToken: string) {
 export function fetchCustomBackendError(code: string, msg: string) {
   return request({ url: '/auth/error', params: { code, msg } });
 }
+
+export function fetchLogout() {
+  return request<boolean>({ url: '/auth/logout', method: 'delete' });
+}

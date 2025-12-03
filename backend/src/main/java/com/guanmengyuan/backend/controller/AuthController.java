@@ -1,6 +1,7 @@
 package com.guanmengyuan.backend.controller;
 
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,12 @@ public class AuthController {
         });
     }
 
+    @DeleteMapping("logout")
+    public R<Boolean> logout() {
+        StpUtil.logout();
+        return R.ok(true);
+    }
+
     @GetMapping("getUserInfo")
     public R<UserInfo> getUserInfo() {
         Long userId = StpUtil.getLoginIdAsLong();
@@ -50,6 +57,7 @@ public class AuthController {
         UserInfo userInfo= new UserInfo();
         userInfo.setButtons(ListUtil.of());
         userInfo.setUserName(user.getUserName());
+        userInfo.setNickName(user.getNickName());
         userInfo.setRoles(user.getRoles());
         userInfo.setUserId(userId);
         return R.ok(userInfo);

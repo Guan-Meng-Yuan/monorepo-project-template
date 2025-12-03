@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { VNode } from 'vue';
+import { fetchLogout } from '@/service/api';
 import { useAuthStore } from '@/store/modules/auth';
 import { useRouterPush } from '@/hooks/common/router';
 import { useSvgIcon } from '@/hooks/common/icon';
@@ -58,8 +59,11 @@ function logout() {
     content: $t('common.logoutConfirm'),
     positiveText: $t('common.confirm'),
     negativeText: $t('common.cancel'),
-    onPositiveClick: () => {
-      authStore.resetStore();
+    onPositiveClick: async () => {
+      const { error } = await fetchLogout();
+      if (!error) {
+        authStore.resetStore();
+      }
     }
   });
 }
@@ -82,7 +86,7 @@ function handleDropdown(key: DropdownKey) {
     <div>
       <ButtonIcon>
         <SvgIcon icon="ph:user-circle" class="text-icon-large" />
-        <span class="text-16px font-medium">{{ authStore.userInfo.userName }}</span>
+        <span class="text-16px font-medium">{{ authStore.userInfo.nickName }}</span>
       </ButtonIcon>
     </div>
   </NDropdown>
