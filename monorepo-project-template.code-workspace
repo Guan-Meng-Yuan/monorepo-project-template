@@ -23,6 +23,8 @@
     "i18n-ally.parsers.typescript.compilerOptions": {
       "moduleResolution": "node"
     },
-    "java.compile.nullAnalysis.mode": "disabled"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.saveActions.organizeImports": true,
+    "java.configuration.updateBuildConfiguration": "automatic"
   }
 }

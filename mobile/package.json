@@ -53,7 +53,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:docs": "eslint docs --ext .js,.ts,.vue,.mts,.cts --ignore-pattern '**/*.md'",
-    "prepare": "husky install",
     "commit": "git-cz",
     "release-major": "standard-version --release-as major",
     "release-minor": "standard-version --release-as minor",
