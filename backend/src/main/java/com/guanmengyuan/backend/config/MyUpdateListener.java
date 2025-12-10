@@ -1,0 +1,36 @@
+package com.guanmengyuan.backend.config;
+
+import java.util.Date;
+
+import com.guanmengyuan.backend.model.domain.BaseDomain;
+import com.mybatisflex.annotation.UpdateListener;
+
+import cn.dev33.satoken.stp.StpUtil;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 自定义更新监听
+ */
+@Slf4j
+public class MyUpdateListener implements UpdateListener {
+    /**
+     * 默认构造
+     */
+    public MyUpdateListener() {
+    }
+
+    @Override
+    public void onUpdate(Object o) {
+        Long userId = 0L;
+        try {
+            userId = StpUtil.getLoginIdAsLong();
+        } catch (Exception e) {
+            log.warn("saToken get loginId unsuccessful");
+        }
+        if (o instanceof BaseDomain<?> baseDomain) {
+            baseDomain.setUpdateUserId(userId);
+            baseDomain.setUpdateTime(new Date());
+        }
+
+    }
+}
