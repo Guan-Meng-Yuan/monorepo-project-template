@@ -1,0 +1,38 @@
+server:
+  port: 8080
+solon:
+  app:
+    name: 'demo-app'
+    group: 'demo'
+  logging:
+    appender:
+      console:
+        level: INFO
+      file:
+        level: INFO
+  dataSources:
+    default:
+      class: "com.zaxxer.hikari.HikariDataSource"
+      jdbcUrl: jdbc:mysql://192.168.3.205:3306/backend?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: Aa123456#
+mybatis-flex:
+  type-aliases-package:
+    - com.guanmengyuan.backend.model.domain.*
+  mapper-locations:
+    - com.guanmengyuan.backend.mapper.*
+jpa:
+  default:
+    mappings:
+      - com.guanmengyuan.backend.model.domain.*
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        use_batch_mode: true
+        use_jdbc_metadata_defaults: true
+        hbm2ddl:
+          auto: update
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
