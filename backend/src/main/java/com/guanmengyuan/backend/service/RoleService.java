@@ -5,5 +5,6 @@ import com.mybatisflex.core.service.IService;
 
 public interface RoleService extends IService<Role> {
 
+    Role initRole(String tenantId);
 }
 

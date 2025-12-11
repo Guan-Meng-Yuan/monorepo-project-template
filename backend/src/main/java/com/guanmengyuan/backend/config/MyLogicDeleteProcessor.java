@@ -36,7 +36,7 @@ public class MyLogicDeleteProcessor extends BooleanLogicDeleteProcessor {
                 long loginIdAsLong = StpUtil.getLoginIdAsLong();
                 sql += "," + dialect.wrap("delete_user_id") + EQUALS + loginIdAsLong;
             } catch (Exception e) {
-                log.warn("saToken get loginId unsuccessful");
+                log.atDebug().log("saToken get loginId unsuccessful");
             }
         }
         return sql;

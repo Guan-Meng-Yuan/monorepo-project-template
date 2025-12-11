@@ -21,11 +21,11 @@ public class MyUpdateListener implements UpdateListener {
 
     @Override
     public void onUpdate(Object o) {
-        Long userId = 0L;
+        Long userId = 0L; 
         try {
             userId = StpUtil.getLoginIdAsLong();
         } catch (Exception e) {
-            log.warn("saToken get loginId unsuccessful");
+            log.atDebug().log("saToken get loginId unsuccessful");
         }
         if (o instanceof BaseDomain<?> baseDomain) {
             baseDomain.setUpdateUserId(userId);

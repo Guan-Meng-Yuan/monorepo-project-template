@@ -25,7 +25,7 @@ public class MyInsertListener implements InsertListener {
         try {
             userId = StpUtil.getLoginIdAsLong();
         } catch (Exception e) {
-            log.warn("saToken get loginId unsuccessful");
+            log.atDebug().log("saToken get loginId unsuccessful");
         }
         if (o instanceof BaseDomain<?> baseDomain) {
             baseDomain.setCreateUserId(userId);

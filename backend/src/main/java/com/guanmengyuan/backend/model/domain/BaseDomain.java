@@ -1,17 +1,17 @@
 package com.guanmengyuan.backend.model.domain;
 
-import java.io.Serializable;
 import java.util.Date;
+
+import org.hibernate.annotations.Comment;
 
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.activerecord.Model;
 import com.mybatisflex.core.keygen.KeyGenerators;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Comment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**

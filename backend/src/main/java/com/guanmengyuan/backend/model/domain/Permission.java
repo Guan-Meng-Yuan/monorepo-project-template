@@ -1,5 +1,7 @@
 package com.guanmengyuan.backend.model.domain;
 
+import java.util.List;
+
 import org.hibernate.annotations.Comment;
 
 import com.guanmengyuan.backend.model.dto.MenuMeta;
@@ -54,9 +56,35 @@ public class Permission extends TenantDomain<Permission> {
     @Comment("父权限ID")
     private Long parentId;
 
+    @Comment("重定向路径")
+    private String redirect;
+
+    @Comment("图标")
+    private String icon;
+
+    @Comment("排序")
+    @Column(name = "`order`")
+    private Integer order;
+
+    @Comment("激活菜单")
+    private String activeMenu;
+
+    @Comment("多标签页")
+    private Boolean multiTab;
+
+    @Comment("保持 alive")
+    private Boolean keepAlive;
+
+    @Comment("菜单类型 1:目录 2:菜单 3:按钮")
+    private Integer menuType;
+
     @com.mybatisflex.annotation.Column(ignore = true)
     @Transient
     private MenuMeta meta;
+    
+    @Transient    
+    @com.mybatisflex.annotation.Column(ignore = true)
+    private List<Permission> children;
 
     public MenuMeta getMeta() {
         MenuMeta menuMeta = new MenuMeta();
@@ -64,6 +92,11 @@ public class Permission extends TenantDomain<Permission> {
         menuMeta.setI18nKey(i18nKey);
         menuMeta.setConstant(constant);
         menuMeta.setHideInMenu(hideInMenu);
+        menuMeta.setIcon(icon);
+        menuMeta.setOrder(order);
+        menuMeta.setActiveMenu(activeMenu);
+        menuMeta.setMultiTab(multiTab);
+        menuMeta.setKeepAlive(keepAlive);
         return menuMeta;
     }
 }
