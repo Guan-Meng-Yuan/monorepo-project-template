@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.annotations.Comment;
 
 import com.guanmengyuan.backend.model.dto.MenuMeta;
+import com.mybatisflex.annotation.RelationOneToMany;
 import com.mybatisflex.annotation.Table;
 
 import jakarta.persistence.Column;
@@ -84,6 +85,7 @@ public class Permission extends TenantDomain<Permission> {
     
     @Transient    
     @com.mybatisflex.annotation.Column(ignore = true)
+    @RelationOneToMany(targetField = "parentId")
     private List<Permission> children;
 
     public MenuMeta getMeta() {

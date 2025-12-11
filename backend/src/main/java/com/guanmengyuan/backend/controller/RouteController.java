@@ -10,6 +10,7 @@ import org.noear.solon.annotation.Param;
 import com.guanmengyuan.backend.model.domain.Permission;
 import com.guanmengyuan.backend.model.domain.RolePermission;
 import com.guanmengyuan.backend.model.domain.UserRole;
+import com.guanmengyuan.backend.model.dto.UserRoute;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.tenant.TenantManager;
 
@@ -29,8 +30,10 @@ public class RouteController {
 
     @Get
     @Mapping("/getUserRoutes")
-    public List<Permission> getUserRoutes() {
-        return Permission.of()
+    public UserRoute getUserRoutes() {
+        UserRoute userRoute = new UserRoute();
+        userRoute.setHome("home");
+        userRoute.setRoutes(Permission.of()
                 .innerJoin(RolePermission.class)
                 .on(QueryMethods.column(Permission::getId).eq(QueryMethods.column(RolePermission::getPermissionId)))
                 .innerJoin(UserRole.class)
@@ -50,9 +53,9 @@ public class RouteController {
                         .and(UserRole::getUserId).eq(StpUtil.getLoginIdAsLong())
                         .and(Permission::getParentId).eq(per.getId())
                         .toQueryWrapper())
-                .list();
+                .list());
+        return userRoute;
     }
-
 
     @Get
     @Mapping("/isRouteExist")
