@@ -2,6 +2,7 @@ package com.guanmengyuan.backend.model.domain;
 
 import org.hibernate.annotations.Comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.core.activerecord.Model;
 
@@ -30,6 +31,7 @@ import lombok.Getter;
      */
     @Column(tenantId = true)
     @Comment("租户ID")
+    @JsonIgnore
     private String tenantId;
 
      /**

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.hibernate.annotations.Comment;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.guanmengyuan.backend.model.dto.MenuMeta;
-import com.mybatisflex.annotation.RelationOneToMany;
 import com.mybatisflex.annotation.Table;
 
 import jakarta.persistence.Column;
@@ -63,6 +63,9 @@ public class Permission extends TenantDomain<Permission> {
     @Comment("图标")
     private String icon;
 
+    @Comment("图标类型 1:iconify 2:local")
+    private Integer iconType;
+
     @Comment("排序")
     @Column(name = "`order`")
     private Integer order;
@@ -79,13 +82,16 @@ public class Permission extends TenantDomain<Permission> {
     @Comment("菜单类型 1:目录 2:菜单 3:按钮")
     private Integer menuType;
 
+    @Comment("状态")
+    private Integer status;
+
     @com.mybatisflex.annotation.Column(ignore = true)
     @Transient
     private MenuMeta meta;
-    
-    @Transient    
+
+    @Transient
     @com.mybatisflex.annotation.Column(ignore = true)
-    @RelationOneToMany(targetField = "parentId")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Permission> children;
 
     public MenuMeta getMeta() {

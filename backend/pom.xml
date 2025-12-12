@@ -25,11 +25,21 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.noear</groupId>
+                    <artifactId>solon-serialization-snack4</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-serialization-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.noear</groupId>
@@ -39,11 +49,11 @@
             <groupId>org.noear</groupId>
             <artifactId>solon-data</artifactId>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.6.4.Final</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -69,6 +79,10 @@
             <artifactId>hutool-crypto</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>hibernate-jakarta-solon-plugin</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.mybatis-flex</groupId>
             <artifactId>mybatis-flex-solon-plugin</artifactId>
             <version>1.11.4</version>
@@ -85,6 +99,13 @@
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>solon-parent</artifactId>
+                <version>3.7.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-jakarta-parent</artifactId>
                 <version>3.7.3</version>
                 <type>pom</type>
                 <scope>import</scope>

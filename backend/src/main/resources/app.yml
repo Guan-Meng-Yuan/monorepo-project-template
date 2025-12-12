@@ -5,8 +5,7 @@ solon:
     json:
       longAsString: true
   app:
-    name: 'demo-app'
-    group: 'demo'
+    name: 'backend'
   logging:
     appender:
       console:
@@ -15,12 +14,11 @@ solon:
         level: INFO
       "com.guanmengyuan.backend.mapper":
         level: DEBUG
-
   dataSources:
     default:
       class: "com.zaxxer.hikari.HikariDataSource"
-      jdbcUrl: jdbc:mysql://localhost:3306/backend?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
-      # jdbcUrl: jdbc:mysql://192.168.3.205:3306/backend?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+      # jdbcUrl: jdbc:mysql://localhost:3306/backend?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+      jdbcUrl: jdbc:mysql://192.168.3.205:3306/backend?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
       driverClassName: com.mysql.cj.jdbc.Driver
       username: root
       password: Aa123456#

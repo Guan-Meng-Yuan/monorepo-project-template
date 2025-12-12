@@ -57,9 +57,9 @@ const title = computed(() => {
 type Model = Pick<
   Api.SystemManage.Menu,
   | 'menuType'
-  | 'menuName'
-  | 'routeName'
-  | 'routePath'
+  | 'title'
+  | 'name'
+  | 'path'
   | 'component'
   | 'order'
   | 'i18nKey'
@@ -87,18 +87,18 @@ const model = ref(createDefaultModel());
 function createDefaultModel(): Model {
   return {
     menuType: '1',
-    menuName: '',
-    routeName: '',
-    routePath: '',
+    title: '',
+    name: '',
+    path: '',
     pathParam: '',
     component: '',
     layout: '',
     page: '',
     i18nKey: null,
     icon: '',
-    iconType: '1',
+    iconType: 1,
     parentId: 0,
-    status: '1',
+    status: 1,
     keepAlive: false,
     constant: false,
     order: 0,
@@ -112,13 +112,13 @@ function createDefaultModel(): Model {
   };
 }
 
-type RuleKey = Extract<keyof Model, 'menuName' | 'status' | 'routeName' | 'routePath'>;
+type RuleKey = Extract<keyof Model, 'title' | 'status' | 'name' | 'path'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
-  menuName: defaultRequiredRule,
+  title: defaultRequiredRule,
   status: defaultRequiredRule,
-  routeName: defaultRequiredRule,
-  routePath: defaultRequiredRule
+  name: defaultRequiredRule,
+  path: defaultRequiredRule
 };
 
 const disabledMenuType = computed(() => props.operateType === 'edit');
@@ -141,8 +141,8 @@ const showPage = computed(() => model.value.menuType === '2');
 const pageOptions = computed(() => {
   const allPages = [...props.allPages];
 
-  if (model.value.routeName && !allPages.includes(model.value.routeName)) {
-    allPages.unshift(model.value.routeName);
+  if (model.value.name && !allPages.includes(model.value.name)) {
+    allPages.unshift(model.value.name);
   }
 
   const opts: CommonType.Option[] = allPages.map(page => ({
@@ -195,7 +195,7 @@ function handleInitModel() {
     const { component, ...rest } = props.rowData;
 
     const { layout, page } = getLayoutAndPage(component);
-    const { path, param } = getPathParamFromRoutePath(rest.routePath);
+    const { path, param } = getPathParamFromRoutePath(rest.path);
 
     Object.assign(model.value, rest, { layout, page, routePath: path, pathParam: param });
   }
@@ -213,16 +213,16 @@ function closeDrawer() {
 }
 
 function handleUpdateRoutePathByRouteName() {
-  if (model.value.routeName) {
-    model.value.routePath = getRoutePathByRouteName(model.value.routeName);
+  if (model.value.name) {
+    model.value.path = getRoutePathByRouteName(model.value.name);
   } else {
-    model.value.routePath = '';
+    model.value.path = '';
   }
 }
 
 function handleUpdateI18nKeyByRouteName() {
-  if (model.value.routeName) {
-    model.value.i18nKey = `route.${model.value.routeName}` as App.I18n.I18nKey;
+  if (model.value.name) {
+    model.value.i18nKey = `route.${model.value.name}` as App.I18n.I18nKey;
   } else {
     model.value.i18nKey = null;
   }
@@ -241,10 +241,10 @@ function getSubmitParams() {
   const { layout, page, pathParam, ...params } = model.value;
 
   const component = transformLayoutAndPageToComponent(layout, page);
-  const routePath = getRoutePathWithParam(model.value.routePath, pathParam);
+  const routePath = getRoutePathWithParam(model.value.path, pathParam);
 
   params.component = component;
-  params.routePath = routePath;
+  params.path = routePath;
 
   return params;
 }
@@ -271,7 +271,7 @@ watch(visible, () => {
 });
 
 watch(
-  () => model.value.routeName,
+  () => model.value.name,
   () => {
     handleUpdateRoutePathByRouteName();
     handleUpdateI18nKeyByRouteName();
@@ -290,13 +290,13 @@ watch(
             </NRadioGroup>
           </NFormItemGi>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.menuName')" path="menuName">
-            <NInput v-model:value="model.menuName" :placeholder="$t('page.manage.menu.form.menuName')" />
+            <NInput v-model:value="model.title" :placeholder="$t('page.manage.menu.form.menuName')" />
           </NFormItemGi>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.routeName')" path="routeName">
-            <NInput v-model:value="model.routeName" :placeholder="$t('page.manage.menu.form.routeName')" />
+            <NInput v-model:value="model.name" :placeholder="$t('page.manage.menu.form.routeName')" />
           </NFormItemGi>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.routePath')" path="routePath">
-            <NInput v-model:value="model.routePath" disabled :placeholder="$t('page.manage.menu.form.routePath')" />
+            <NInput v-model:value="model.path" disabled :placeholder="$t('page.manage.menu.form.routePath')" />
           </NFormItemGi>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.pathParam')" path="pathParam">
             <NInput v-model:value="model.pathParam" :placeholder="$t('page.manage.menu.form.pathParam')" />
@@ -332,14 +332,14 @@ watch(
             </NRadioGroup>
           </NFormItemGi>
           <NFormItemGi span="24 m:12" :label="$t('page.manage.menu.icon')" path="icon">
-            <template v-if="model.iconType === '1'">
+            <template v-if="model.iconType === 1">
               <NInput v-model:value="model.icon" :placeholder="$t('page.manage.menu.form.icon')" class="flex-1">
                 <template #suffix>
                   <SvgIcon v-if="model.icon" :icon="model.icon" class="text-icon" />
                 </template>
               </NInput>
             </template>
-            <template v-if="model.iconType === '2'">
+            <template v-if="model.iconType === 2">
               <NSelect
                 v-model:value="model.icon"
                 :placeholder="$t('page.manage.menu.form.localIcon')"

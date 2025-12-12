@@ -17,7 +17,12 @@ public class SystemManageController {
             @Param(defaultValue = "10", required = false) Long size) {
         return Permission.of()
                 .where(Permission::getParentId).isNull()
-                .withRelations()
+                .and(Permission::getConstant).eq(false)
+                .withFields()
+                .fieldMapping(Permission::getChildren, per -> Permission.of()
+                        .where(Permission::getParentId).eq(per.getId())
+                        .and(Permission::getConstant).eq(false)
+                        .toQueryWrapper())
                 .page(Page.of(current, size));
     }
 }

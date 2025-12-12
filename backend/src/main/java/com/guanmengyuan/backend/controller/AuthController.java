@@ -2,6 +2,7 @@ package com.guanmengyuan.backend.controller;
 
 import java.util.List;
 
+import org.hibernate.solon.annotation.Db;
 import org.noear.solon.annotation.Body;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Delete;
@@ -23,11 +24,15 @@ import com.mybatisflex.core.tenant.TenantManager;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import cn.hutool.v7.crypto.digest.BCrypt;
+import jakarta.persistence.EntityManagerFactory;
 
 @Controller
 @Mapping("/auth")
 public class AuthController {
 
+    @Db("default")
+    private EntityManagerFactory entityManagerFactory;
+ 
     @Post
     @Mapping("/login")
     public LoginToken login(@Body LoginRequest request) {

@@ -28,9 +28,17 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       width: 48
     },
     {
-      key: 'id',
-      title: $t('page.manage.menu.id'),
-      align: 'center'
+      key: 'title',
+      title: $t('page.manage.menu.menuName'),
+      align: 'center',
+      minWidth: 120,
+      render: row => {
+        const { i18nKey, title } = row;
+
+        const label = i18nKey ? $t(i18nKey) : title;
+
+        return <span>{label}</span>;
+      }
     },
     {
       key: 'menuType',
@@ -48,28 +56,16 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
         return <NTag type={tagMap[row.menuType]}>{label}</NTag>;
       }
     },
-    {
-      key: 'menuName',
-      title: $t('page.manage.menu.menuName'),
-      align: 'center',
-      minWidth: 120,
-      render: row => {
-        const { i18nKey, menuName } = row;
 
-        const label = i18nKey ? $t(i18nKey) : menuName;
-
-        return <span>{label}</span>;
-      }
-    },
     {
       key: 'icon',
       title: $t('page.manage.menu.icon'),
       align: 'center',
       width: 60,
       render: row => {
-        const icon = row.iconType === '1' ? row.icon : undefined;
+        const icon = row.iconType === 1 ? row.icon : undefined;
 
-        const localIcon = row.iconType === '2' ? row.icon : undefined;
+        const localIcon = row.iconType === 2 ? row.icon : undefined;
 
         return (
           <div class="flex-center">
@@ -79,13 +75,13 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       }
     },
     {
-      key: 'routeName',
+      key: 'name',
       title: $t('page.manage.menu.routeName'),
       align: 'center',
       minWidth: 120
     },
     {
-      key: 'routePath',
+      key: 'path',
       title: $t('page.manage.menu.routePath'),
       align: 'center',
       minWidth: 120
@@ -127,12 +123,6 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
 
         return <NTag type={tagMap[hide]}>{label}</NTag>;
       }
-    },
-    {
-      key: 'parentId',
-      title: $t('page.manage.menu.parentId'),
-      width: 90,
-      align: 'center'
     },
     {
       key: 'order',

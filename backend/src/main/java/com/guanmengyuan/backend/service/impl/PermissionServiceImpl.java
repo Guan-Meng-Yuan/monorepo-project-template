@@ -25,6 +25,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setI18nKey("route.login")
                 .setConstant(true)
                 .setHideInMenu(true)
+                .setMenuType(2)
+                .setStatus(1)
                 .setTenantId(tenantId).save();
 
         // 403 路由
@@ -37,6 +39,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setI18nKey("route.403")
                 .setConstant(true)
                 .setHideInMenu(true)
+                .setStatus(1)
                 .setTenantId(tenantId).save();
 
         // 404 路由
@@ -49,6 +52,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setI18nKey("route.404")
                 .setConstant(true)
                 .setHideInMenu(true)
+                .setMenuType(2)
+                .setStatus(1)
                 .setTenantId(tenantId).save();
 
         // 500 路由
@@ -61,6 +66,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setI18nKey("route.500")
                 .setConstant(true)
                 .setHideInMenu(true)
+                .setMenuType(2)
+                .setStatus(1)
                 .setTenantId(tenantId).save();
 
         // about 路由
@@ -72,10 +79,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("about")
                 .setI18nKey("route.about")
                 .setIcon("fluent:book-information-24-regular")
+                .setIconType(1)
                 .setOrder(10)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setMenuType(2)
+                .setStatus(1)
                 .setTenantId(tenantId).save();
         // home 路由
         Permission.of()
@@ -86,8 +95,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("home")
                 .setI18nKey("route.home")
                 .setIcon("mdi:monitor-dashboard")
+                .setIconType(1)
                 .setOrder(1)
                 .setMenuType(2)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setTenantId(tenantId).save();
@@ -101,10 +112,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("manage")
                 .setI18nKey("route.manage")
                 .setIcon("carbon:cloud-service-management")
+                .setIconType(1)
                 .setOrder(9)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setMenuType(1)
+                .setStatus(1)
                 .setTenantId(tenantId);
         manageRoute.save();
         Long manageParentId = manageRoute.getId();
@@ -118,9 +131,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("manage_menu")
                 .setI18nKey("route.manage_menu")
                 .setIcon("material-symbols:route")
+                .setIconType(1)
                 .setOrder(3)
                 .setMenuType(2)
                 .setKeepAlive(true)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setParentId(manageParentId)
@@ -135,8 +150,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("manage_role")
                 .setI18nKey("route.manage_role")
                 .setIcon("carbon:user-role")
+                .setIconType(1)
                 .setOrder(2)
                 .setMenuType(2)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setParentId(manageParentId)
@@ -151,8 +168,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("manage_user")
                 .setI18nKey("route.manage_user")
                 .setIcon("ic:round-manage-accounts")
+                .setIconType(1)
                 .setOrder(1)
                 .setMenuType(2)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(false)
                 .setParentId(manageParentId)
@@ -168,6 +187,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setI18nKey("route.manage_user-detail")
                 .setActiveMenu("manage_user")
                 .setMenuType(2)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(true)
                 .setParentId(manageParentId)
@@ -182,6 +202,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("user-center")
                 .setI18nKey("route.user-center")
                 .setMenuType(2)
+                .setStatus(1)
                 .setConstant(false)
                 .setHideInMenu(true)
                 .setTenantId(tenantId).save();

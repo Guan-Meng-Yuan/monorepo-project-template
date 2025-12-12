@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hibernate.annotations.Comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.activerecord.Model;
 import com.mybatisflex.core.keygen.KeyGenerators;
@@ -65,6 +66,7 @@ public class BaseDomain<T extends Model<T>> extends Model<T> {
     @Column(name = "is_deleted")
     @Comment("逻辑删除")
     @com.mybatisflex.annotation.Column(value = "is_deleted", isLogicDelete = true)
+    @JsonIgnore
     private Boolean deleted;
     /**
      * 删除时间
