@@ -38,6 +38,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setTitle("403")
                 .setI18nKey("route.403")
                 .setConstant(true)
+                .setMenuType(2)
                 .setHideInMenu(true)
                 .setStatus(1)
                 .setTenantId(tenantId).save();

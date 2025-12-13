@@ -23,8 +23,8 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
   api: () => fetchGetRoleList(searchParams),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page;
-    searchParams.size = params.pageSize;
+    searchParams.pageNumber = params.page;
+    searchParams.pageSize = params.pageSize;
   },
   columns: () => [
     {
