@@ -32,7 +32,7 @@ public class AuthController {
 
     @Db("default")
     private EntityManagerFactory entityManagerFactory;
- 
+
     @Post
     @Mapping("/login")
     public LoginToken login(@Body LoginRequest request) {

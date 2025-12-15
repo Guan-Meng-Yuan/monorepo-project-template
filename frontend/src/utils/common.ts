@@ -5,6 +5,7 @@ import { $t } from '@/locales';
  *
  * @example
  *   ```ts
+ *   // String keys
  *   const record = {
  *     key1: 'label1',
  *     key2: 'label2'
@@ -14,15 +15,34 @@ import { $t } from '@/locales';
  *   //   { value: 'key1', label: 'label1' },
  *   //   { value: 'key2', label: 'label2' }
  *   // ]
+ *
+ *   // Number keys
+ *   const numRecord = {
+ *     1: 'label1',
+ *     2: 'label2'
+ *   };
+ *   const numOptions = transformRecordToOption(numRecord);
+ *   // [
+ *   //   { value: 1, label: 'label1' },
+ *   //   { value: 2, label: 'label2' }
+ *   // ]
  *   ```;
  *
  * @param record
  */
-export function transformRecordToOption<T extends Record<string, string>>(record: T) {
-  return Object.entries(record).map(([value, label]) => ({
-    value,
-    label
-  })) as CommonType.Option<keyof T, T[keyof T]>[];
+export function transformRecordToOption<T extends Record<string | number, string>>(
+  record: T
+): CommonType.Option<string | number, T[keyof T]>[] {
+  return Object.entries(record).map(([value, label]) => {
+    // Check if the key is a numeric string, convert to number if so
+    const numValue = Number(value);
+    const isNumeric = !Number.isNaN(numValue) && value === String(numValue) && value.trim() !== '';
+
+    return {
+      value: isNumeric ? numValue : value,
+      label
+    };
+  }) as CommonType.Option<string | number, T[keyof T]>[];
 }
 
 /**

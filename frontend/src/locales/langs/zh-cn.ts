@@ -625,9 +625,13 @@ const local: App.I18n.Schema = {
         addMenu: '新增菜单',
         editMenu: '编辑菜单',
         addChildMenu: '新增子菜单',
+        addButton: '新增权限按钮',
+        editButton: '编辑权限按钮',
+        editChildMenu: '编辑子菜单',
         type: {
           directory: '目录',
-          menu: '菜单'
+          menu: '菜单',
+          button: '按钮'
         },
         iconType: {
           iconify: 'iconify图标',

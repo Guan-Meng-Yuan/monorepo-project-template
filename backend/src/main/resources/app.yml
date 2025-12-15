@@ -4,6 +4,7 @@ solon:
   serialization:
     json:
       longAsString: true
+      dateAsFormat: 'yyyy-MM-dd HH:mm:ss'
   app:
     name: 'backend'
   logging:

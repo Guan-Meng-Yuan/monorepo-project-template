@@ -5,7 +5,7 @@ import { NButton, NPopconfirm, NTag } from 'naive-ui';
 import { useBoolean } from '@sa/hooks';
 import { yesOrNoRecord } from '@/constants/common';
 import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
-import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
+import { fetchDeleteMenu, fetchGetAllPages, fetchGetMenuList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { defaultTransform, useNaivePaginatedTable, useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
@@ -29,7 +29,7 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
     },
     {
       key: 'title',
-      title: $t('page.manage.menu.menuName'),
+      title: '名称',
       align: 'center',
       minWidth: 120,
       render: row => {
@@ -48,7 +48,8 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       render: row => {
         const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
           1: 'default',
-          2: 'primary'
+          2: 'primary',
+          3: 'success'
         };
 
         const label = $t(menuTypeRecord[row.menuType]);
@@ -133,23 +134,27 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
     {
       key: 'operate',
       title: $t('common.operate'),
-      align: 'center',
-      width: 230,
+      align: 'right',
       render: row => (
         <div class="flex-center justify-end gap-8px">
-          {row.menuType === '1' && (
-            <NButton type="primary" ghost size="small" onClick={() => handleAddChildMenu(row)}>
+          {row.menuType === 1 && (
+            <NButton type="primary" ghost size="small" text onClick={() => handleAddChildMenu(row)}>
               {$t('page.manage.menu.addChildMenu')}
             </NButton>
           )}
-          <NButton type="primary" ghost size="small" onClick={() => handleEdit(row)}>
+          {row.menuType !== 3 && (
+            <NButton type="primary" ghost text size="small" onClick={() => handleAddButton(row)}>
+              新增权限按钮
+            </NButton>
+          )}
+          <NButton type="primary" ghost text size="small" onClick={() => handleEdit(row)}>
             {$t('common.edit')}
           </NButton>
           <NPopconfirm onPositiveClick={() => handleDelete(row.id)}>
             {{
               default: () => $t('common.confirmDelete'),
               trigger: () => (
-                <NButton type="error" ghost size="small">
+                <NButton type="error" text ghost size="small">
                   {$t('common.delete')}
                 </NButton>
               )
@@ -171,17 +176,17 @@ function handleAdd() {
 }
 
 async function handleBatchDelete() {
-  // request
-  console.log(checkedRowKeys.value);
-
-  onBatchDeleted();
+  const { data: deleteRes } = await fetchDeleteMenu(checkedRowKeys.value);
+  if (deleteRes) {
+    onBatchDeleted();
+  }
 }
 
-function handleDelete(id: number) {
-  // request
-  console.log(id);
-
-  onDeleted();
+async function handleDelete(id: string) {
+  const { data: deleteRes } = await fetchDeleteMenu([id]);
+  if (deleteRes) {
+    onDeleted();
+  }
 }
 
 /** the edit menu data or the parent menu data when adding a child menu */
@@ -196,6 +201,13 @@ function handleEdit(item: Api.SystemManage.Menu) {
 
 function handleAddChildMenu(item: Api.SystemManage.Menu) {
   operateType.value = 'addChild';
+
+  editingData.value = { ...item };
+
+  openModal();
+}
+function handleAddButton(item: Api.SystemManage.Menu) {
+  operateType.value = 'addButton';
 
   editingData.value = { ...item };
 

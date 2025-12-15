@@ -53,3 +53,49 @@ export function fetchGetMenuTree() {
     method: 'get'
   });
 }
+export type MenuModel = Pick<
+  Api.SystemManage.Menu,
+  | 'menuType'
+  | 'title'
+  | 'name'
+  | 'path'
+  | 'component'
+  | 'order'
+  | 'i18nKey'
+  | 'icon'
+  | 'iconType'
+  | 'status'
+  | 'parentId'
+  | 'keepAlive'
+  | 'constant'
+  | 'href'
+  | 'hideInMenu'
+  | 'activeMenu'
+  | 'multiTab'
+  | 'fixedIndexInTab'
+> & {
+  query: NonNullable<Api.SystemManage.Menu['query']>;
+  layout: string;
+  page: string;
+  pathParam: string;
+};
+
+/** menu data for API request (without layout, page, pathParam) */
+export type MenuRequestData = Omit<MenuModel, 'layout' | 'page' | 'pathParam'>;
+
+/** save or update menu */
+export function fetchSaveOrUpdateMenu(data: MenuRequestData) {
+  return request<boolean>({
+    url: '/systemManage/saveOrUpdateMenu',
+    method: 'post',
+    data
+  });
+}
+
+/** delete menu */
+export function fetchDeleteMenu(ids: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteMenu/${ids}`,
+    method: 'delete'
+  });
+}

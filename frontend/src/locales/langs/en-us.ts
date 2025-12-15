@@ -629,9 +629,13 @@ const local: App.I18n.Schema = {
         addMenu: 'Add Menu',
         editMenu: 'Edit Menu',
         addChildMenu: 'Add Child Menu',
+        addButton: 'Add Permission Button',
+        editButton: 'Edit Permission Button',
+        editChildMenu: 'Edit Child Menu',
         type: {
           directory: 'Directory',
-          menu: 'Menu'
+          menu: 'Menu',
+          button: 'Button'
         },
         iconType: {
           iconify: 'Iconify Icon',

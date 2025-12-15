@@ -28,7 +28,6 @@ public class SaTokenConfiguration {
           .setAuth(req -> {
             // System.out.println("---------- sa全局认证");
             SaRouter.match("/**", StpUtil::checkLogin);
-  
             // 根据路由划分模块，不同模块不同鉴权
             // SaRouter.match("/user/**", r -> StpUtil.checkPermission("user"));
             // SaRouter.match("/admin/**", r -> StpUtil.checkPermission("admin"));

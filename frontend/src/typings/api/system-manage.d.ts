@@ -67,7 +67,7 @@ declare namespace Api {
      * - "1": directory
      * - "2": menu
      */
-    type MenuType = '1' | '2';
+    type MenuType = 1 | 2 | 3;
 
     type MenuButton = {
       /**
@@ -104,7 +104,7 @@ declare namespace Api {
 
     type Menu = Common.CommonRecord<{
       /** parent menu id */
-      parentId: number;
+      parentId: string | null;
       /** menu type */
       menuType: MenuType;
       /** menu name */
