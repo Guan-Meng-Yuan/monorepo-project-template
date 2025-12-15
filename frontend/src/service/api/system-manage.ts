@@ -99,3 +99,85 @@ export function fetchDeleteMenu(ids: string[]) {
     method: 'delete'
   });
 }
+
+/** get role permission ids */
+export function fetchGetRolePermissionIds(roleId: string) {
+  return request<string[]>({
+    url: `/systemManage/getRolePermissionIds/${roleId}`,
+    method: 'get'
+  });
+}
+
+/** save role permission */
+export function fetchSaveRolePermission(roleId: string, permissionIds: string[]) {
+  return request<boolean>({
+    url: '/systemManage/saveRolePermission',
+    method: 'post',
+    data: { roleId, permissionIds }
+  });
+}
+export type RoleModel = Pick<Api.SystemManage.Role, 'roleName' | 'roleCode' | 'roleDesc' | 'status'>;
+
+/** save or update role */
+export function fetchSaveOrUpdateRole(data: RoleModel) {
+  return request<boolean>({
+    url: '/systemManage/saveOrUpdateRole',
+    method: 'post',
+    data
+  });
+}
+
+/** delete role */
+export function fetchDeleteRole(ids: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteRole/${ids}`,
+    method: 'delete'
+  });
+}
+export type UserModel = Pick<
+  Api.SystemManage.User,
+  'username' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'userRoles' | 'status'
+>;
+
+/** save or update user */
+export function fetchSaveOrUpdateUser(data: UserModel) {
+  return request<boolean>({
+    url: '/systemManage/saveOrUpdateUser',
+    method: 'post',
+    data
+  });
+}
+
+/** delete user */
+export function fetchDeleteUser(ids: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteUser/${ids}`,
+    method: 'delete'
+  });
+}
+
+/** delete tenant */
+export function fetchDeleteTenant(ids: string[]) {
+  return request<boolean>({
+    url: `/systemManage/deleteTenant/${ids}`,
+    method: 'delete'
+  });
+}
+export type TenantModel = Pick<Api.SystemManage.Tenant, 'name' | 'code' | 'status'>;
+/** save or update tenant */
+export function fetchSaveOrUpdateTenant(data: TenantModel) {
+  return request<boolean>({
+    url: '/systemManage/saveOrUpdateTenant',
+    method: 'post',
+    data
+  });
+}
+
+/** get tenant list */
+export function fetchGetTenantList(params?: Api.SystemManage.TenantSearchParams) {
+  return request<Api.SystemManage.TenantList>({
+    url: '/systemManage/getTenantList',
+    method: 'get',
+    params
+  });
+}

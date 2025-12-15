@@ -16,6 +16,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setRoleName("超级管理员");
         role.setRoleCode("R_SUPER");
         role.setTenantId(tenantId);
+        role.setStatus(1);
         role.save();
         return role;
     }

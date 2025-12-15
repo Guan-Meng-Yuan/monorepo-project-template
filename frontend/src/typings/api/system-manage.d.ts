@@ -17,6 +17,23 @@ declare namespace Api {
       roleDesc: string;
     }>;
 
+    /** tenant */
+    type Tenant = Common.CommonRecord<{
+      /** tenant name */
+      name: string;
+      /** tenant code */
+      code: string;
+      /** tenant status */
+      status: number;
+    }>;
+
+    /** tenant search params */
+    type TenantSearchParams = CommonType.RecordNullable<
+      Pick<Api.SystemManage.Tenant, 'name' | 'code' | 'status'> & CommonSearchParams
+    >;
+
+    /** tenant list */
+    type TenantList = Common.PaginatingQueryRecord<Tenant>;
     /** role search params */
     type RoleSearchParams = CommonType.RecordNullable<
       Pick<Api.SystemManage.Role, 'roleName' | 'roleCode' | 'status'> & CommonSearchParams
@@ -39,7 +56,7 @@ declare namespace Api {
     /** user */
     type User = Common.CommonRecord<{
       /** user name */
-      userName: string;
+      username: string;
       /** user gender */
       userGender: UserGender | null;
       /** user nick name */
@@ -54,7 +71,7 @@ declare namespace Api {
 
     /** user search params */
     type UserSearchParams = CommonType.RecordNullable<
-      Pick<Api.SystemManage.User, 'userName' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'status'> &
+      Pick<Api.SystemManage.User, 'username' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'status'> &
         CommonSearchParams
     >;
 

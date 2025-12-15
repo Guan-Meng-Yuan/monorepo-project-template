@@ -7,6 +7,6 @@ import com.mybatisflex.core.service.IService;
 
 public interface PermissionService extends IService<Permission> {
 
-    List<Long> initPermissions(String tenantId);
+    List<Long> initPermissions(String tenantId, Boolean initTenant);
 }
 

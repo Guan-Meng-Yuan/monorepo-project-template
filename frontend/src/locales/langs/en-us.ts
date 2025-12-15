@@ -242,6 +242,8 @@ const local: App.I18n.Schema = {
     document_alova: 'Alova Document',
     'user-center': 'User Center',
     about: 'About',
+
+    // @ts-expect-error 不检测该异常,该属性有vue-router自动生成
     function: 'System Function',
     alova: 'Alova Example',
     alova_request: 'Alova Request',

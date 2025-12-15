@@ -39,9 +39,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 User user = User.of();
                 user.setUsername("admin");
                 user.setPassword(BCrypt.hashpw("123456"));
+                user.setStatus(1);
                 user.setTenantId(TenantConstant.DEFAULT_TENANT_ID);
                 user.save();
-                List<Long> permissionIds = permissionService.initPermissions(TenantConstant.DEFAULT_TENANT_ID);
+                List<Long> permissionIds = permissionService.initPermissions(TenantConstant.DEFAULT_TENANT_ID, true);
                 Role role = roleService.initRole(TenantConstant.DEFAULT_TENANT_ID);
                 UserRole.of().setUserId(user.getId()).setRoleId(role.getId())
                         .setTenantId(TenantConstant.DEFAULT_TENANT_ID).save();

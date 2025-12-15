@@ -13,8 +13,7 @@ import com.mybatisflex.solon.service.impl.ServiceImpl;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission>
         implements PermissionService {
     @Override
-    public List<Long> initPermissions(String tenantId) {
-
+    public List<Long> initPermissions(String tenantId, Boolean initTenant) {
         // login 路由
         Permission.of()
                 .setName("login")
@@ -177,6 +176,24 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .setHideInMenu(false)
                 .setParentId(manageParentId)
                 .setTenantId(tenantId).save();
+        if (initTenant) {
+            // manage_tenant
+            Permission.of()
+                    .setName("manage_tenant")
+                    .setPath("/manage/tenant")
+                    .setComponent("view.manage_tenant")
+                    .setProps(null)
+                    .setTitle("租户管理")
+                    .setIcon("lets-icons:group-scan")
+                    .setIconType(1)
+                    .setOrder(4)
+                    .setMenuType(2)
+                    .setStatus(1)
+                    .setConstant(false)
+                    .setHideInMenu(false)
+                    .setParentId(manageParentId)
+                    .setTenantId(tenantId).save();
+        }
 
         // manage_user-detail
         Permission.of()

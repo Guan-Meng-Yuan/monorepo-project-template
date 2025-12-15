@@ -1,11 +1,18 @@
 package com.guanmengyuan.backend.model.domain;
 
+import java.util.List;
+
+import org.hibernate.annotations.Comment;
+
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.RelationOneToMany;
 import com.mybatisflex.annotation.Table;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Comment;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(callSuper = true)
@@ -34,4 +41,12 @@ public class User extends TenantDomain<User> {
 
     @Comment("邮箱")
     private String userEmail;
+
+    @Comment("状态：1-正常，2-禁用")
+    private Integer status;
+
+    @Transient
+    @Column(ignore = true)
+    @RelationOneToMany(targetTable = "user_role",targetField = "userId",valueField = "roleId")
+    private List<Long> userRoles;
 }

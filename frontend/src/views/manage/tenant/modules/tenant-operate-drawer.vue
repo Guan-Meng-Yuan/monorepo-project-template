@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { jsonClone } from '@sa/utils';
-import { useBoolean } from '@sa/hooks';
 import { enableStatusOptions } from '@/constants/business';
-import type { RoleModel } from '@/service/api';
-import { fetchSaveOrUpdateRole } from '@/service/api';
+import type { TenantModel } from '@/service/api';
+import { fetchSaveOrUpdateTenant } from '@/service/api';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
-import MenuAuthModal from './menu-auth-modal.vue';
 
 defineOptions({
-  name: 'RoleOperateDrawer'
+  name: 'TenantOperateDrawer'
 });
 
 interface Props {
   /** the type of operation */
   operateType: NaiveUI.TableOperateType;
   /** the edit row data */
-  rowData?: Api.SystemManage.Role | null;
+  rowData?: Api.SystemManage.Tenant | null;
 }
 
 const props = defineProps<Props>();
@@ -34,38 +32,32 @@ const visible = defineModel<boolean>('visible', {
 
 const { formRef, validate, restoreValidation } = useNaiveForm();
 const { defaultRequiredRule } = useFormRules();
-const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean();
 
 const title = computed(() => {
   const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.manage.role.addRole'),
-    edit: $t('page.manage.role.editRole')
+    add: '新增租户',
+    edit: '编辑租户'
   };
   return titles[props.operateType];
 });
 
 const model = ref(createDefaultModel());
 
-function createDefaultModel(): RoleModel {
+function createDefaultModel(): TenantModel {
   return {
-    roleName: '',
-    roleCode: '',
-    roleDesc: '',
-    status: null
+    name: '',
+    code: '',
+    status: 1
   };
 }
 
-type RuleKey = Exclude<keyof RoleModel, 'roleDesc'>;
+type RuleKey = Extract<keyof TenantModel, 'name' | 'code' | 'status'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
-  roleName: defaultRequiredRule,
-  roleCode: defaultRequiredRule,
+  name: defaultRequiredRule,
+  code: defaultRequiredRule,
   status: defaultRequiredRule
 };
-
-const roleId = computed(() => props.rowData?.id || '');
-
-const isEdit = computed(() => props.operateType === 'edit');
 
 function handleInitModel() {
   model.value = createDefaultModel();
@@ -81,7 +73,7 @@ function closeDrawer() {
 
 async function handleSubmit() {
   await validate();
-  const { data } = await fetchSaveOrUpdateRole(model.value);
+  const { data } = await fetchSaveOrUpdateTenant(model.value);
   if (data) {
     window.$message?.success($t('common.updateSuccess'));
     closeDrawer();
@@ -101,25 +93,18 @@ watch(visible, () => {
   <NDrawer v-model:show="visible" display-directive="show" :width="360">
     <NDrawerContent :title="title" :native-scrollbar="false" closable>
       <NForm ref="formRef" :model="model" :rules="rules">
-        <NFormItem :label="$t('page.manage.role.roleName')" path="roleName">
-          <NInput v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
+        <NFormItem label="租户名称" path="name">
+          <NInput v-model:value="model.name" placeholder="请输入租户名称" />
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleCode')" path="roleCode">
-          <NInput v-model:value="model.roleCode" :placeholder="$t('page.manage.role.form.roleCode')" />
+        <NFormItem label="租户编码" path="code">
+          <NInput v-model:value="model.code" placeholder="请输入租户编码" />
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleStatus')" path="status">
+        <NFormItem label="租户状态" path="status">
           <NRadioGroup v-model:value="model.status">
             <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
           </NRadioGroup>
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleDesc')" path="roleDesc">
-          <NInput v-model:value="model.roleDesc" :placeholder="$t('page.manage.role.form.roleDesc')" />
-        </NFormItem>
       </NForm>
-      <NSpace v-if="isEdit">
-        <NButton @click="openMenuAuthModal">角色权限</NButton>
-        <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-      </NSpace>
       <template #footer>
         <NSpace :size="16">
           <NButton @click="closeDrawer">{{ $t('common.cancel') }}</NButton>

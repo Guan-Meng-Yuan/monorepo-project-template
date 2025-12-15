@@ -12,21 +12,18 @@ import lombok.experimental.Accessors;
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table("role")
+@Table("tenant")
 @Accessors(chain = true)
-public class Role extends TenantDomain<Role> {
-    public Role() {
+public class Tenant extends BaseDomain<Tenant> {
+    public Tenant() {
     }
 
-    @Comment("角色名称")
-    private String roleName;
+    @Comment("租户名称")
+    private String name;
 
-    @Comment("角色代码")
-    private String roleCode;
+    @Comment("租户编码")
+    private String code;
 
-    @Comment("角色描述")
-    private String roleDesc;
-    
-    @Comment("状态")
+    @Comment("租户状态")
     private Integer status;
 }

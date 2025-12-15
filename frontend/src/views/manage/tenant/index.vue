@@ -2,28 +2,25 @@
 import { reactive } from 'vue';
 import { NButton, NPopconfirm, NTag } from 'naive-ui';
 import { enableStatusRecord } from '@/constants/business';
-import { fetchDeleteUser, fetchGetUserList } from '@/service/api';
+import { fetchDeleteTenant, fetchGetTenantList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { defaultTransform, useNaivePaginatedTable, useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
-import UserOperateDrawer from './modules/user-operate-drawer.vue';
-import UserSearch from './modules/user-search.vue';
+import TenantOperateDrawer from './modules/tenant-operate-drawer.vue';
+import TenantSearch from './modules/tenant-search.vue';
 
 const appStore = useAppStore();
 
-const searchParams: Api.SystemManage.UserSearchParams = reactive({
+const searchParams: Api.SystemManage.TenantSearchParams = reactive({
   current: 1,
   size: 10,
   status: null,
-  userName: null,
-  userGender: null,
-  nickName: null,
-  userPhone: null,
-  userEmail: null
+  name: null,
+  code: null
 });
 
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
-  api: () => fetchGetUserList(searchParams),
+  api: () => fetchGetTenantList(searchParams),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
     searchParams.pageNumber = params.page;
@@ -36,32 +33,20 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       width: 48
     },
     {
-      key: 'username',
-      title: $t('page.manage.user.userName'),
+      key: 'name',
+      title: '租户名称',
       align: 'center',
       minWidth: 100
     },
     {
-      key: 'nickName',
-      title: $t('page.manage.user.nickName'),
+      key: 'code',
+      title: '租户编码',
       align: 'center',
       minWidth: 100
-    },
-    {
-      key: 'userPhone',
-      title: $t('page.manage.user.userPhone'),
-      align: 'center',
-      width: 120
-    },
-    {
-      key: 'userEmail',
-      title: $t('page.manage.user.userEmail'),
-      align: 'center',
-      minWidth: 200
     },
     {
       key: 'status',
-      title: $t('page.manage.user.userStatus'),
+      title: '租户状态',
       align: 'center',
       width: 100,
       render: row => {
@@ -118,14 +103,14 @@ const {
 } = useTableOperate(data, 'id', getData);
 
 async function handleBatchDelete() {
-  const { data: deleteRes } = await fetchDeleteUser(checkedRowKeys.value);
+  const { data: deleteRes } = await fetchDeleteTenant(checkedRowKeys.value);
   if (deleteRes) {
     onBatchDeleted();
   }
 }
 
 async function handleDelete(id: string) {
-  const { data: deleteRes } = await fetchDeleteUser([id]);
+  const { data: deleteRes } = await fetchDeleteTenant([id]);
   if (deleteRes) {
     onDeleted();
   }
@@ -138,8 +123,8 @@ function edit(id: string) {
 
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <UserSearch v-model:model="searchParams" @search="getDataByPage" />
-    <NCard :title="$t('page.manage.user.title')" :bordered="false" size="small" class="card-wrapper sm:flex-1-hidden">
+    <TenantSearch v-model:model="searchParams" @search="getDataByPage" />
+    <NCard title="租户管理" :bordered="false" size="small" class="card-wrapper sm:flex-1-hidden">
       <template #header-extra>
         <TableHeaderOperation
           v-model:columns="columnChecks"
@@ -163,7 +148,7 @@ function edit(id: string) {
         :pagination="mobilePagination"
         class="sm:h-full"
       />
-      <UserOperateDrawer
+      <TenantOperateDrawer
         v-model:visible="drawerVisible"
         :operate-type="operateType"
         :row-data="editingData"
